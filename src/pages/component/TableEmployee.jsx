@@ -1,12 +1,18 @@
 // import { DataKaryawan as dakar } from "../../utils/dummy";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import "./TableEmployee.css";
 
 import { TableContext } from "../../context/TableContext";
 import Datepicker from "react-tailwindcss-datepicker";
 const TableEmployee = (props) => {
-  const { datas, colNames, changefilterData, handleDatesChange, dates } =
+  const { datas, colNames, changefilterData, handleDatesChange, dates, handleData } =
     useContext(TableContext);
+
+    useEffect(() => {
+      handleData();
+    }, []);
+  
+    useEffect(() => {}, [datas]);
 
   return (
     <div className="mt-0 w-full h-full p-8">
@@ -21,10 +27,27 @@ const TableEmployee = (props) => {
             />
 
             <Datepicker
+              classNames="w-72"
               primaryColor={"blue"}
               value={dates}
               onChange={handleDatesChange}
             />
+            {props.Editing === true ? (
+            <a
+              href="#"
+              className="w-72 bg-gray-300 hover:bg-gray-400 text-sm text-gray-700 font-semibold py-1 px-2 rounded inline-flex items-center"
+            >
+              <svg
+                className="fill-current w-3 h-3 mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+              </svg>
+              <span>Download All</span>
+            </a>
+            ) : false
+            }
           </div>
           {props.Editing ? (
             <button
@@ -51,10 +74,12 @@ const TableEmployee = (props) => {
                             item === "name"
                               ? "px-2 py-2 text-start text-xs font-medium text-gray-500 uppercase "
                               : "px-2 py-2 text-start text-xs font-medium text-gray-500 uppercase "
-                          }
+                            }
                           key={index}
                         >
-                          {item}
+                          
+                          {item === "sanksi_aktif" ? (props.Editing === true ? (item) : false) : item !== "sanksi_aktif" ? 
+                               (item) : false}
                         </th>
                       ))}
                     </tr>
@@ -71,7 +96,7 @@ const TableEmployee = (props) => {
                             }
                             key={colindex}
                           >
-                            {col === "posisi" ? (
+                            { col === "posisi" ? (
                               <p className="w-52">{item[col]}</p>
                             ) : col === "keterangan" ? (
                               props.Editing === true ? (
@@ -81,6 +106,7 @@ const TableEmployee = (props) => {
                                   name="keterangan"
                                   onChange={(e) => handleChange(e, colindex)}
                                 >
+                                  <option value={item[col]}></option>
                                   <option value="funding">funding</option>
                                   <option value="hold">hold</option>
                                   <option value="hak">hak</option>
@@ -123,9 +149,9 @@ const TableEmployee = (props) => {
                                   </button>
                                 </div>
                               )
-                            ) : (
-                              item[col]
-                            )}
+                            ) : col === "sanksi_aktif" ? (props.Editing === true ? (item[col]) : false) : col !== "sanksi_aktif" ? 
+                               (item[col]) : false
+                            }
                           </td>
                         ))}
                         <td></td>

@@ -28,13 +28,13 @@ const TableContextProvider = ({ children }) => {
   };
 
   const changefilterData = (e) => {
-    console.log(e.target.value);
-    console.log("trigered");
-
+    console.log("get",e.target.value);
+    // const niks = e.target.value
     if (e.target.value === "") {
+      console.log("trigered");
       setDatas(dakar);
     } else {
-      setDatas(datas.filter((item) => item.nik === e.target.value));
+      setDatas(dakar.filter((item) => item.nik === e.target.value));
     }
   };
   // useEffect(() => {
@@ -51,11 +51,7 @@ const TableContextProvider = ({ children }) => {
   //   }
   // }, [datas]);
 
-  useEffect(() => {
-    handleData();
-  }, []);
 
-  useEffect(() => {}, [datas]);
 
   return (
     <TableContext.Provider
@@ -67,6 +63,7 @@ const TableContextProvider = ({ children }) => {
         changefilterData,
         dates,
         handleDatesChange,
+        
       }}
     >
       {children}
