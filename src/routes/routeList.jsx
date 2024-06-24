@@ -3,7 +3,7 @@ import Employee from "../pages/Employee";
 import Picincentive from "../pages/PicIncentive";
 export const routeList = createBrowserRouter([
   {
-    path: "/pic",
+    path: "/",
     element: <Picincentive />,
   },
   {

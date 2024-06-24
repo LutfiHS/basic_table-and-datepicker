@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.table-wrapper {
+  /* width: 100%; */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+
+  gap: 50px;
+}
+
+.table-container {
+  margin: 0 auto;
+  max-width: calc(100vw - 15vw);
+
+  /* height: 750px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+
+  /* margin-left: 20px; */
+}
+
+.high-table {
+  height: 70vh;
+}
