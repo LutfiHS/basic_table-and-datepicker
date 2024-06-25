@@ -13,6 +13,7 @@ const TableEmployee = (props) => {
     dates,
     handleData,
     handleChangeDatas,
+    valuetable
   } = useContext(TableContext);
 
   const formatNumber = (number) => {
@@ -115,7 +116,7 @@ const TableEmployee = (props) => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {datas.map((item, rowindex) => (
+                    {valuetable.map((item, rowindex) => (
                       <tr key={rowindex}>
                         {colNames.map((col, colindex) => (
                           <td
@@ -128,7 +129,21 @@ const TableEmployee = (props) => {
                           >
                             {col === "posisi" ? (
                               <p className="w-52">{item[col]}</p>
-                            ) : col === "keterangan" ? (
+                            ) : col === "status_pengajuan" ? (props.Editing === true ? (
+                              <select
+                                type="text"
+                                defaultValue={item[col]}
+                                name="status_pengajuan"
+                                onChange={(e) =>
+                                  handleChangeDatas(e, item.nik)
+                                }
+                              >
+                                <option value={item[col]}>{item[col]}</option>
+                                <option value="belum diajukan">belum diajukan</option>
+                                <option value="dalam pengajuan">dalam pengajuan</option>
+                                <option value="sudah diajukan">sudah diajukan</option>
+                              </select>
+                            ) : <p className="min-w-14">{item[col]}</p>) : col === "keterangan" ? (
                               props.Editing === true ? (
                                 <select
                                   type="text"

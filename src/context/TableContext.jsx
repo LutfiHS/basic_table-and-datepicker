@@ -6,12 +6,32 @@ const TableContextProvider = ({ children }) => {
   const [datas, setDatas] = useState([]);
   const [searchNik, setSearchNik] = useState("");
   const [colNames, setColNames] = useState([]); //Object.keys(datas[0]);
-
+  const [valuetable, setValuetable] = useState([]);
   const [dates, setDates] = useState({
     startDate: new Date(),
     endDate: new Date().setMonth(11),
   });
 
+
+// ! pertama
+  const handleData = () => {
+    const savedData = localStorage.getItem("dataKaryawan");
+
+    if (savedData !== "[]") {
+      // const savedData = localStorage.getItem("dataKaryawan");
+      setDatas(JSON.parse(savedData));
+      setValuetable(JSON.parse(savedData));
+      console.log("ambil dari local: ", savedData);
+    } else {
+      setDatas(dakar);
+      setValuetable(dakar);
+      localStorage.setItem("dataKaryawan", JSON.stringify(dakar));
+      console.log("ambil dari dakar");
+    }
+    setColNames(Object.keys(dakar[0]));
+  };
+
+  // ! kedua
   const handleChangeDatas = (e, nik) => {
     console.log("newValue:", e.target.value, "index:", nik);
     const { name, value } = e.target;
@@ -26,28 +46,17 @@ const TableContextProvider = ({ children }) => {
     });
   };
 
-  const handleData = () => {
-    const savedData = localStorage.getItem("dataKaryawan");
-
-    if (savedData) {
-      setDatas(JSON.parse(savedData));
-      console.log("ambil dari local");
-    } else {
-      setDatas(dakar);
-      localStorage.setItem("dataKaryawan", JSON.stringify(dakar));
-      console.log("ambil dari dakar");
-    }
-    setColNames(Object.keys(dakar[0]));
-  };
-
+  // ! ketiga
   const changefilterData = (e) => {
     setSearchNik(e.target.value);
     const savedData = localStorage.getItem("dataKaryawan");
 
     if (e.target.value === "") {
-      setDatas(dakar);
+      setValuetable(datas);
     } else {
-      setDatas(dakar.filter((item) => item.nik === e.target.value));
+      // setValuetable(JSON.parse(savedData));
+      setValuetable(datas.filter((item) => item.nik === e.target.value));
+      console.log("filter data");
     }
   };
 
@@ -56,8 +65,8 @@ const TableContextProvider = ({ children }) => {
     setDates(newValue);
 
     console.log("set start date to:", newValue.startDate);
-    setDatas(
-      dakar.filter(
+    setValuetable(
+      datas.filter(
         (item) =>
           item.tanggal_pengajuan >= newValue.startDate &&
           item.tanggal_pengajuan <= newValue.endDate
@@ -94,6 +103,7 @@ const TableContextProvider = ({ children }) => {
         handleDatesChange,
         searchNik,
         handleChangeDatas,
+        valuetable
         // handleView,
       }}
     >
