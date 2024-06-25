@@ -5,14 +5,34 @@ import "./TableEmployee.css";
 import { TableContext } from "../../context/TableContext";
 import Datepicker from "react-tailwindcss-datepicker";
 const TableEmployee = (props) => {
-  const { datas, colNames, changefilterData, handleDatesChange, dates, handleData } =
-    useContext(TableContext);
+  const {
+    datas,
+    colNames,
+    changefilterData,
+    handleDatesChange,
+    dates,
+    handleData,
+    handleChangeDatas,
+  } = useContext(TableContext);
 
-    useEffect(() => {
+  const formatNumber = (number) => {
+    return number
+      .toFixed(2) // Ensure two decimal places
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Add commas as thousand separators
+  };
+
+  const handleonChange = (e) => {
+    console.log("newValue:", e.target.value);
+  };
+
+  useEffect(() => {
+    // handleData();
+    if (props.Editing === true) {
       handleData();
-    }, []);
-  
-    useEffect(() => {}, [datas]);
+    } else {
+      changefilterData({ target: { value: 0 } });
+    }
+  }, []);
 
   return (
     <div className="mt-0 w-full h-full p-8">
@@ -20,34 +40,38 @@ const TableEmployee = (props) => {
         <div className="flex justify-between mr-4 ml-4">
           <div className="flex h-10 w-fit gap-4 justify-center items-center">
             <input
+              defaultValue=""
               className=" self-start w-72 border border-gray-300 rounded-md p-1"
               type="text"
               placeholder="search NIK"
               onChange={changefilterData}
             />
-
-            <Datepicker
-              classNames="w-72"
-              primaryColor={"blue"}
-              value={dates}
-              onChange={handleDatesChange}
-            />
             {props.Editing === true ? (
-            <a
-              href="#"
-              className="w-72 bg-gray-300 hover:bg-gray-400 text-sm text-gray-700 font-semibold py-1 px-2 rounded inline-flex items-center"
-            >
-              <svg
-                className="fill-current w-3 h-3 mr-2"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-              </svg>
-              <span>Download All</span>
-            </a>
-            ) : false
-            }
+              <div className="flex gap-4">
+                <Datepicker
+                  classNames="w-72"
+                  primaryColor={"blue"}
+                  value={dates}
+                  onChange={handleDatesChange}
+                />
+
+                <a
+                  href="#"
+                  className="justify-center w-72 bg-gray-300 hover:bg-gray-400 text-sm text-gray-700 font-semibold py-1 px-2 rounded inline-flex items-center"
+                >
+                  <svg
+                    className="fill-current w-3 h-3 mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                  </svg>
+                  <span>Download All</span>
+                </a>
+              </div>
+            ) : (
+              false
+            )}
           </div>
           {props.Editing ? (
             <button
@@ -60,7 +84,7 @@ const TableEmployee = (props) => {
             false
           )}
         </div>
-        <div className="high-table w-full overflow-auto">
+        <div className="high-table w-full overflow-x-auto">
           <div className="">
             <div className="p-1.5 min-w-full inline-block align-middle">
               <div className="border rounded-lg shadow">
@@ -74,12 +98,18 @@ const TableEmployee = (props) => {
                             item === "name"
                               ? "px-2 py-2 text-start text-xs font-medium text-gray-500 uppercase "
                               : "px-2 py-2 text-start text-xs font-medium text-gray-500 uppercase "
-                            }
+                          }
                           key={index}
                         >
-                          
-                          {item === "sanksi_aktif" ? (props.Editing === true ? (item) : false) : item !== "sanksi_aktif" ? 
-                               (item) : false}
+                          {item === "sanksi_aktif"
+                            ? props.Editing === true
+                              ? item
+                              : false
+                            : item !== "sanksi_aktif"
+                            ? props.Editing === true && item === "dokumen"
+                              ? false
+                              : item
+                            : item}
                         </th>
                       ))}
                     </tr>
@@ -96,7 +126,7 @@ const TableEmployee = (props) => {
                             }
                             key={colindex}
                           >
-                            { col === "posisi" ? (
+                            {col === "posisi" ? (
                               <p className="w-52">{item[col]}</p>
                             ) : col === "keterangan" ? (
                               props.Editing === true ? (
@@ -104,7 +134,9 @@ const TableEmployee = (props) => {
                                   type="text"
                                   defaultValue={item[col]}
                                   name="keterangan"
-                                  onChange={(e) => handleChange(e, colindex)}
+                                  onChange={(e) =>
+                                    handleChangeDatas(e, item.nik)
+                                  }
                                 >
                                   <option value={item[col]}></option>
                                   <option value="funding">funding</option>
@@ -121,37 +153,56 @@ const TableEmployee = (props) => {
                                   type="text"
                                   defaultValue={item[col]}
                                   name="notes"
-                                  onChange={(e) => handleChange(e, colindex)}
+                                  onChange={(e) =>
+                                    handleChangeDatas(e, item.nik)
+                                  }
                                 />
                               ) : (
                                 <p className="w-40">{item[col]}</p>
                               )
                             ) : col == "dokumen" ? (
                               props.Editing === true ? (
-                                <a
-                                  href={item[col]}
-                                  className="bg-gray-300 hover:bg-gray-400 text-sm text-gray-700 font-semibold py-1 px-2 rounded inline-flex items-center"
-                                >
-                                  <svg
-                                    className="fill-current w-3 h-3 mr-2"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-                                  </svg>
-                                  <span>Download</span>
-                                </a>
+                                //   <a
+                                //     href={item[col]}
+                                //     className="bg-gray-300 hover:bg-gray-400 text-sm text-gray-700 font-semibold py-1 px-2 rounded inline-flex items-center"
+                                //   >
+                                //     <svg
+                                //       className="fill-current w-3 h-3 mr-2"
+                                //       xmlns="http://www.w3.org/2000/svg"
+                                //       viewBox="0 0 20 20"
+                                //     >
+                                //       <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                                //     </svg>
+                                //     <span>Download</span>
+                                //   </a>
+                                // )
+                                false
                               ) : (
                                 <div className="flex flex-col gap-1 max-w-56">
-                                  <input type="file" />
-                                  <button className="bg-gray-300 hover:bg-gray-400 text-sm text-gray-700 font-semibold py-1 px-2 rounded inline-flex items-center">
+                                  <input className="w-fit" type="file" />
+                                  <button className="w-24 bg-gray-300 hover:bg-gray-400 text-sm text-gray-700 font-semibold py-1 px-2 rounded inline-flex items-center">
                                     <p>Upload</p>
                                   </button>
                                 </div>
                               )
-                            ) : col === "sanksi_aktif" ? (props.Editing === true ? (item[col]) : false) : col !== "sanksi_aktif" ? 
-                               (item[col]) : false
-                            }
+                            ) : col === "sanksi_aktif" ? (
+                              props.Editing === true ? (
+                                item[col]
+                              ) : (
+                                false
+                              )
+                            ) : col !== "sanksi_aktif" ? (
+                              col === "cp" ||
+                              col === "saving" ||
+                              col === "insentif_reguler" ||
+                              col === "total" ? (
+                                formatNumber(item[col])
+                              ) : (
+                                item[col]
+                              )
+                            ) : (
+                              false
+                            )}
                           </td>
                         ))}
                         <td></td>
