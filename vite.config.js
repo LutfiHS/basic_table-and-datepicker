@@ -4,5 +4,5 @@ import { ghPages } from 'vite-plugin-gh-pages';
 
 export default defineConfig({
   plugins: [react(), ghPages()],
-  base: 'resignation-submission', // ganti <REPO_NAME> dengan nama repository GitHub Anda
+  base: '/resignation-submission/', // ganti <REPO_NAME> dengan nama repository GitHub Anda
 });
