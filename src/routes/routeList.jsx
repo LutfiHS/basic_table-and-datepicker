@@ -3,11 +3,11 @@ import Employee from "../pages/Employee";
 import Picincentive from "../pages/PicIncentive";
 export const routeList = createBrowserRouter([
   {
-    path: "/",
+    path: "resignation-submission/",
     element: <Picincentive />,
   },
   {
-    path: "/employee",
+    path: "resignation-submission/employee",
     element: <Employee />,
   },
 ]);
