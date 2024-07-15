@@ -18,7 +18,7 @@ const DefaultSidebar = () => {
           </Typography>
         </div>
         <List className="flex flex-col gap-2">
-          <Link to="/">
+          <Link to="/resignation-submission/">
             <ListItem className="flex items-center gap-2 h-10">
               <ListItemPrefix>
                 <UserCircleIcon className="h-5 w-5" />
@@ -27,12 +27,12 @@ const DefaultSidebar = () => {
             </ListItem>
           </Link>
 
-          <Link to="/employee">
+          <Link to="/resignation-submission/employee">
             <ListItem className="flex items-center gap-2 h-10">
               <ListItemPrefix>
                 <UserCircleIcon className="h-5 w-5" />
               </ListItemPrefix>
-              Employee
+              Employees
             </ListItem>
           </Link>
         </List>
